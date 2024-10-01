@@ -227,3 +227,23 @@ class UrlsTestCase(TestCase):
         url = reverse('delete_role', args=[-1])
         response = self.client.delete(url)
         self.assertEqual(response.status_code, 400)
+    
+    def test_get_calendar_link(self):
+        url = reverse('link_calendar', args=[1])
+        response = self.client.post(url, data={'calendar_link': 'http://example.com'})
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_calendar_link_invalid(self):
+        url = reverse('link_calendar', args=[-1])
+        response = self.client.post(url, data={'calendar_link': 'http://example.com'})
+        self.assertEqual(response.status_code, 400)
+
+    def test_get_calendar_events(self):
+        url = reverse('get_calendar_events', args=[1])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_calendar_events_invalid(self):
+        url = reverse('get_calendar_events', args=[-1])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 400)

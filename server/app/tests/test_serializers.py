@@ -1,1 +1,168 @@
-from django.test import TestCase\nfrom rest_framework.exceptions import ValidationError\nfrom app.models import Attendance, LeaveBalance, Activity, Leave, Employee, Notification, Role, Permission\nfrom app.serializers import AttendanceSerializer, LeaveBalanceSerializer, RecentActivitiesSerializer, LeaveRequestSerializer, AttendanceDetailSerializer, TeamAttendanceSerializer, TeamLeaveRequestSerializer, EmployeeSerializer, OrganizationDirectorySerializer, OrganizationStructureSerializer, EmployeeProfileSerializer, AttendanceReportSerializer, NotificationSerializer, RoleSerializer, PermissionSerializer\nclass AttendanceSerializerTest(TestCase):\n    def test_valid_serialization(self):\n        attendance_data = {'user': 1, 'status': 'present', 'date': '2023-10-01'}\n        serializer = AttendanceSerializer(data=attendance_data)\n        self.assertTrue(serializer.is_valid())\n        self.assertEqual(serializer.validated_data['status'], 'present')\n    def test_invalid_serialization(self):\n        attendance_data = {'user': 1, 'status': '', 'date': '2023-10-01'}\n        serializer = AttendanceSerializer(data=attendance_data)\n        self.assertFalse(serializer.is_valid())\n        self.assertIn('status', serializer.errors)\nclass LeaveBalanceSerializerTest(TestCase):\n    def test_valid_serialization(self):\n        leave_balance_data = {'user': 1, 'annual_leave': 10, 'sick_leave': 5}\n        serializer = LeaveBalanceSerializer(data=leave_balance_data)\n        self.assertTrue(serializer.is_valid())\n        self.assertEqual(serializer.validated_data['annual_leave'], 10)\n    def test_invalid_serialization(self):\n        leave_balance_data = {'user': 1, 'annual_leave': -1, 'sick_leave': 5}\n        serializer = LeaveBalanceSerializer(data=leave_balance_data)\n        self.assertFalse(serializer.is_valid())\n        self.assertIn('annual_leave', serializer.errors)\nclass RecentActivitiesSerializerTest(TestCase):\n    def test_valid_serialization(self):\n        activity_data = {'user': 1, 'activity_type': 'login', 'timestamp': '2023-10-01T12:00:00Z'}\n        serializer = RecentActivitiesSerializer(data=activity_data)\n        self.assertTrue(serializer.is_valid())\n        self.assertEqual(serializer.validated_data['activity_type'], 'login')\n    def test_invalid_serialization(self):\n        activity_data = {'user': 1, 'activity_type': '', 'timestamp': '2023-10-01T12:00:00Z'}\n        serializer = RecentActivitiesSerializer(data=activity_data)\n        self.assertFalse(serializer.is_valid())\n        self.assertIn('activity_type', serializer.errors)\nclass LeaveRequestSerializerTest(TestCase):\n    def test_valid_serialization(self):\n        leave_request_data = {'employee': 1, 'start_date': '2023-10-01', 'end_date': '2023-10-10', 'reason': 'vacation'}\n        serializer = LeaveRequestSerializer(data=leave_request_data)\n        self.assertTrue(serializer.is_valid())\n        self.assertEqual(serializer.validated_data['reason'], 'vacation')\n    def test_invalid_serialization(self):\n        leave_request_data = {'employee': 1, 'start_date': '', 'end_date': '2023-10-10', 'reason': 'vacation'}\n        serializer = LeaveRequestSerializer(data=leave_request_data)\n        self.assertFalse(serializer.is_valid())\n        self.assertIn('start_date', serializer.errors)\nclass AttendanceDetailSerializerTest(TestCase):\n    def test_valid_serialization(self):\n        attendance_detail_data = {'employee': 1, 'date': '2023-10-01', 'status': 'present'}\n        serializer = AttendanceDetailSerializer(data=attendance_detail_data)\n        self.assertTrue(serializer.is_valid())\n        self.assertEqual(serializer.validated_data['status'], 'present')\n    def test_invalid_serialization(self):\n        attendance_detail_data = {'employee': 1, 'date': '', 'status': 'present'}\n        serializer = AttendanceDetailSerializer(data=attendance_detail_data)\n        self.assertFalse(serializer.is_valid())\n        self.assertIn('date', serializer.errors)\nclass TeamAttendanceSerializerTest(TestCase):\n    def test_valid_serialization(self):\n        team_attendance_data = {'employee': 1, 'date': '2023-10-01', 'status': 'present'}\n        serializer = TeamAttendanceSerializer(data=team_attendance_data)\n        self.assertTrue(serializer.is_valid())\n        self.assertEqual(serializer.validated_data['status'], 'present')\n    def test_invalid_serialization(self):\n        team_attendance_data = {'employee': 1, 'date': '', 'status': 'present'}\n        serializer = TeamAttendanceSerializer(data=team_attendance_data)\n        self.assertFalse(serializer.is_valid())\n        self.assertIn('date', serializer.errors)\nclass TeamLeaveRequestSerializerTest(TestCase):\n    def test_valid_serialization(self):\n        team_leave_request_data = {'employee': 1, 'start_date': '2023-10-01', 'end_date': '2023-10-10', 'reason': 'vacation', 'status': 'pending'}\n        serializer = TeamLeaveRequestSerializer(data=team_leave_request_data)\n        self.assertTrue(serializer.is_valid())\n        self.assertEqual(serializer.validated_data['reason'], 'vacation')\n    def test_invalid_serialization(self):\n        team_leave_request_data = {'employee': 1, 'start_date': '2023-10-01', 'end_date': '', 'reason': 'vacation', 'status': 'pending'}\n        serializer = TeamLeaveRequestSerializer(data=team_leave_request_data)\n        self.assertFalse(serializer.is_valid())\n        self.assertIn('end_date', serializer.errors)\nclass EmployeeSerializerTest(TestCase):\n    def test_valid_serialization(self):\n        employee_data = {'employee_id': 1, 'name': 'John Doe'}\n        serializer = EmployeeSerializer(data=employee_data)\n        self.assertTrue(serializer.is_valid())\n        self.assertEqual(serializer.validated_data['name'], 'John Doe')\n    def test_invalid_serialization(self):\n        employee_data = {'employee_id': '', 'name': 'John Doe'}\n        serializer = EmployeeSerializer(data=employee_data)\n        self.assertFalse(serializer.is_valid())\n        self.assertIn('employee_id', serializer.errors)\nclass OrganizationDirectorySerializerTest(TestCase):\n    def test_valid_serialization(self):\n        organization_data = {'employee_id': 1, 'name': 'John Doe', 'department': 'Engineering', 'position': 'Software Engineer'}\n        serializer = OrganizationDirectorySerializer(data=organization_data)\n        self.assertTrue(serializer.is_valid())\n    def test_invalid_serialization(self):\n        organization_data = {'employee_id': 1, 'name': ''}\n        serializer = OrganizationDirectorySerializer(data=organization_data)\n        self.assertFalse(serializer.is_valid())\n        self.assertIn('name', serializer.errors)\nclass OrganizationStructureSerializerTest(TestCase):\n    def test_valid_serialization(self):\n        structure_data = {'employee_id': 1, 'name': 'John Doe'}\n        serializer = OrganizationStructureSerializer(data=structure_data)\n        self.assertTrue(serializer.is_valid())\n        self.assertEqual(serializer.validated_data['name'], 'John Doe')\n    def test_invalid_serialization(self):\n        structure_data = {'employee_id': '', 'name': 'John Doe'}\n        serializer = OrganizationStructureSerializer(data=structure_data)\n        self.assertFalse(serializer.is_valid())\n        self.assertIn('employee_id', serializer.errors)\nclass EmployeeProfileSerializerTest(TestCase):\n    def test_valid_serialization(self):\n        employee_profile_data = {'employee_id': 1, 'name': 'John Doe'}\n        serializer = EmployeeProfileSerializer(data=employee_profile_data)\n        self.assertTrue(serializer.is_valid())\n        self.assertEqual(serializer.validated_data['name'], 'John Doe')\n    def test_invalid_serialization(self):\n        employee_profile_data = {'employee_id': '', 'name': 'John Doe'}\n        serializer = EmployeeProfileSerializer(data=employee_profile_data)\n        self.assertFalse(serializer.is_valid())\n        self.assertIn('employee_id', serializer.errors)\nclass AttendanceReportSerializerTest(TestCase):\n    def test_valid_serialization(self):\n        attendance_report_data = {'employee': 1, 'date': '2023-10-01', 'status': 'present'}\n        serializer = AttendanceReportSerializer(data=attendance_report_data)\n        self.assertTrue(serializer.is_valid())\n        self.assertEqual(serializer.validated_data['status'], 'present')\n    def test_invalid_serialization(self):\n        attendance_report_data = {'employee': 1, 'date': '', 'status': 'present'}\n        serializer = AttendanceReportSerializer(data=attendance_report_data)\n        self.assertFalse(serializer.is_valid())\n        self.assertIn('date', serializer.errors)\nclass NotificationSerializerTest(TestCase):\n    def test_valid_serialization(self):\n        notification_data = {'employee': 1, 'message': 'Test message', 'is_read': False}\n        serializer = NotificationSerializer(data=notification_data)\n        self.assertTrue(serializer.is_valid())\n        self.assertEqual(serializer.validated_data['message'], 'Test message')\n    def test_invalid_serialization(self):\n        notification_data = {'employee': 1, 'message': '', 'is_read': False}\n        serializer = NotificationSerializer(data=notification_data)\n        self.assertFalse(serializer.is_valid())\n        self.assertIn('message', serializer.errors)\nclass RoleSerializerTest(TestCase):\n    def test_valid_serialization(self):\n        role_data = {'name': 'Admin', 'permissions': []} \n        serializer = RoleSerializer(data=role_data)\n        self.assertTrue(serializer.is_valid())\n        self.assertEqual(serializer.validated_data['name'], 'Admin')\n    def test_invalid_serialization(self):\n        role_data = {'name': '', 'permissions': []} \n        serializer = RoleSerializer(data=role_data)\n        self.assertFalse(serializer.is_valid())\n        self.assertIn('name', serializer.errors)\nclass PermissionSerializerTest(TestCase):\n    def test_valid_serialization(self):\n        permission_data = {'name': 'view_users'} \n        serializer = PermissionSerializer(data=permission_data)\n        self.assertTrue(serializer.is_valid())\n        self.assertEqual(serializer.validated_data['name'], 'view_users')\n    def test_invalid_serialization(self):\n        permission_data = {'name': ''} \n        serializer = PermissionSerializer(data=permission_data)\n        self.assertFalse(serializer.is_valid())\n        self.assertIn('name', serializer.errors)
+from django.test import TestCase
+from rest_framework.exceptions import ValidationError
+from app.models import Attendance, LeaveBalance, Activity, Leave, Employee, Notification, Role, Permission
+from app.serializers import AttendanceSerializer, LeaveBalanceSerializer, RecentActivitiesSerializer, LeaveRequestSerializer, AttendanceDetailSerializer, TeamAttendanceSerializer, TeamLeaveRequestSerializer, EmployeeSerializer, OrganizationDirectorySerializer, OrganizationStructureSerializer, EmployeeProfileSerializer, AttendanceReportSerializer, NotificationSerializer, RoleSerializer, PermissionSerializer
+class AttendanceSerializerTest(TestCase):
+    def test_valid_serialization(self):
+        attendance_data = {'user': 1, 'status': 'present', 'date': '2023-10-01'}
+        serializer = AttendanceSerializer(data=attendance_data)
+        self.assertTrue(serializer.is_valid())
+        self.assertEqual(serializer.validated_data['status'], 'present')
+    def test_invalid_serialization(self):
+        attendance_data = {'user': 1, 'status': '', 'date': '2023-10-01'}
+        serializer = AttendanceSerializer(data=attendance_data)
+        self.assertFalse(serializer.is_valid())
+        self.assertIn('status', serializer.errors)
+class LeaveBalanceSerializerTest(TestCase):
+    def test_valid_serialization(self):
+        leave_balance_data = {'user': 1, 'annual_leave': 10, 'sick_leave': 5}
+        serializer = LeaveBalanceSerializer(data=leave_balance_data)
+        self.assertTrue(serializer.is_valid())
+        self.assertEqual(serializer.validated_data['annual_leave'], 10)
+    def test_invalid_serialization(self):
+        leave_balance_data = {'user': 1, 'annual_leave': -1, 'sick_leave': 5}
+        serializer = LeaveBalanceSerializer(data=leave_balance_data)
+        self.assertFalse(serializer.is_valid())
+        self.assertIn('annual_leave', serializer.errors)
+class RecentActivitiesSerializerTest(TestCase):
+    def test_valid_serialization(self):
+        activity_data = {'user': 1, 'activity_type': 'login', 'timestamp': '2023-10-01T12:00:00Z'}
+        serializer = RecentActivitiesSerializer(data=activity_data)
+        self.assertTrue(serializer.is_valid())
+        self.assertEqual(serializer.validated_data['activity_type'], 'login')
+    def test_invalid_serialization(self):
+        activity_data = {'user': 1, 'activity_type': '', 'timestamp': '2023-10-01T12:00:00Z'}
+        serializer = RecentActivitiesSerializer(data=activity_data)
+        self.assertFalse(serializer.is_valid())
+        self.assertIn('activity_type', serializer.errors)
+class LeaveRequestSerializerTest(TestCase):
+    def test_valid_serialization(self):
+        leave_request_data = {'employee': 1, 'start_date': '2023-10-01', 'end_date': '2023-10-10', 'reason': 'vacation'}
+        serializer = LeaveRequestSerializer(data=leave_request_data)
+        self.assertTrue(serializer.is_valid())
+        self.assertEqual(serializer.validated_data['reason'], 'vacation')
+    def test_invalid_serialization(self):
+        leave_request_data = {'employee': 1, 'start_date': '', 'end_date': '2023-10-10', 'reason': 'vacation'}
+        serializer = LeaveRequestSerializer(data=leave_request_data)
+        self.assertFalse(serializer.is_valid())
+        self.assertIn('start_date', serializer.errors)
+class AttendanceDetailSerializerTest(TestCase):
+    def test_valid_serialization(self):
+        attendance_detail_data = {'employee': 1, 'date': '2023-10-01', 'status': 'present'}
+        serializer = AttendanceDetailSerializer(data=attendance_detail_data)
+        self.assertTrue(serializer.is_valid())
+        self.assertEqual(serializer.validated_data['status'], 'present')
+    def test_invalid_serialization(self):
+        attendance_detail_data = {'employee': 1, 'date': '', 'status': 'present'}
+        serializer = AttendanceDetailSerializer(data=attendance_detail_data)
+        self.assertFalse(serializer.is_valid())
+        self.assertIn('date', serializer.errors)
+class TeamAttendanceSerializerTest(TestCase):
+    def test_valid_serialization(self):
+        team_attendance_data = {'employee': 1, 'date': '2023-10-01', 'status': 'present'}
+        serializer = TeamAttendanceSerializer(data=team_attendance_data)
+        self.assertTrue(serializer.is_valid())
+        self.assertEqual(serializer.validated_data['status'], 'present')
+    def test_invalid_serialization(self):
+        team_attendance_data = {'employee': 1, 'date': '', 'status': 'present'}
+        serializer = TeamAttendanceSerializer(data=team_attendance_data)
+        self.assertFalse(serializer.is_valid())
+        self.assertIn('date', serializer.errors)
+class TeamLeaveRequestSerializerTest(TestCase):
+    def test_valid_serialization(self):
+        team_leave_request_data = {'employee': 1, 'start_date': '2023-10-01', 'end_date': '2023-10-10', 'reason': 'vacation', 'status': 'pending'}
+        serializer = TeamLeaveRequestSerializer(data=team_leave_request_data)
+        self.assertTrue(serializer.is_valid())
+        self.assertEqual(serializer.validated_data['reason'], 'vacation')
+    def test_invalid_serialization(self):
+        team_leave_request_data = {'employee': 1, 'start_date': '2023-10-01', 'end_date': '', 'reason': 'vacation', 'status': 'pending'}
+        serializer = TeamLeaveRequestSerializer(data=team_leave_request_data)
+        self.assertFalse(serializer.is_valid())
+        self.assertIn('end_date', serializer.errors)
+class EmployeeSerializerTest(TestCase):
+    def test_valid_serialization(self):
+        employee_data = {'employee_id': 1, 'name': 'John Doe'}
+        serializer = EmployeeSerializer(data=employee_data)
+        self.assertTrue(serializer.is_valid())
+        self.assertEqual(serializer.validated_data['name'], 'John Doe')
+    def test_invalid_serialization(self):
+        employee_data = {'employee_id': '', 'name': 'John Doe'}
+        serializer = EmployeeSerializer(data=employee_data)
+        self.assertFalse(serializer.is_valid())
+        self.assertIn('employee_id', serializer.errors)
+class OrganizationDirectorySerializerTest(TestCase):
+    def test_valid_serialization(self):
+        organization_data = {'employee_id': 1, 'name': 'John Doe', 'department': 'Engineering', 'position': 'Software Engineer'}
+        serializer = OrganizationDirectorySerializer(data=organization_data)
+        self.assertTrue(serializer.is_valid())
+    def test_invalid_serialization(self):
+        organization_data = {'employee_id': 1, 'name': ''}
+        serializer = OrganizationDirectorySerializer(data=organization_data)
+        self.assertFalse(serializer.is_valid())
+        self.assertIn('name', serializer.errors)
+class OrganizationStructureSerializerTest(TestCase):
+    def test_valid_serialization(self):
+        structure_data = {'employee_id': 1, 'name': 'John Doe'}
+        serializer = OrganizationStructureSerializer(data=structure_data)
+        self.assertTrue(serializer.is_valid())
+        self.assertEqual(serializer.validated_data['name'], 'John Doe')
+    def test_invalid_serialization(self):
+        structure_data = {'employee_id': '', 'name': 'John Doe'}
+        serializer = OrganizationStructureSerializer(data=structure_data)
+        self.assertFalse(serializer.is_valid())
+        self.assertIn('employee_id', serializer.errors)
+class EmployeeProfileSerializerTest(TestCase):
+    def test_valid_serialization(self):
+        employee_profile_data = {'employee_id': 1, 'name': 'John Doe'}
+        serializer = EmployeeProfileSerializer(data=employee_profile_data)
+        self.assertTrue(serializer.is_valid())
+        self.assertEqual(serializer.validated_data['name'], 'John Doe')
+    def test_invalid_serialization(self):
+        employee_profile_data = {'employee_id': '', 'name': 'John Doe'}
+        serializer = EmployeeProfileSerializer(data=employee_profile_data)
+        self.assertFalse(serializer.is_valid())
+        self.assertIn('employee_id', serializer.errors)
+class AttendanceReportSerializerTest(TestCase):
+    def test_valid_serialization(self):
+        attendance_report_data = {'employee': 1, 'date': '2023-10-01', 'status': 'present'}
+        serializer = AttendanceReportSerializer(data=attendance_report_data)
+        self.assertTrue(serializer.is_valid())
+        self.assertEqual(serializer.validated_data['status'], 'present')
+    def test_invalid_serialization(self):
+        attendance_report_data = {'employee': 1, 'date': '', 'status': 'present'}
+        serializer = AttendanceReportSerializer(data=attendance_report_data)
+        self.assertFalse(serializer.is_valid())
+        self.assertIn('date', serializer.errors)
+class NotificationSerializerTest(TestCase):
+    def test_valid_serialization(self):
+        notification_data = {'employee': 1, 'message': 'Test message', 'is_read': False}
+        serializer = NotificationSerializer(data=notification_data)
+        self.assertTrue(serializer.is_valid())
+        self.assertEqual(serializer.validated_data['message'], 'Test message')
+    def test_invalid_serialization(self):
+        notification_data = {'employee': 1, 'message': '', 'is_read': False}
+        serializer = NotificationSerializer(data=notification_data)
+        self.assertFalse(serializer.is_valid())
+        self.assertIn('message', serializer.errors)
+class RoleSerializerTest(TestCase):
+    def test_valid_serialization(self):
+        role_data = {'name': 'Admin', 'permissions': []} 
+        serializer = RoleSerializer(data=role_data)
+        self.assertTrue(serializer.is_valid())
+        self.assertEqual(serializer.validated_data['name'], 'Admin')
+    def test_invalid_serialization(self):
+        role_data = {'name': '', 'permissions': []} 
+        serializer = RoleSerializer(data=role_data)
+        self.assertFalse(serializer.is_valid())
+        self.assertIn('name', serializer.errors)
+class PermissionSerializerTest(TestCase):
+    def test_valid_serialization(self):
+        permission_data = {'name': 'view_users'} 
+        serializer = PermissionSerializer(data=permission_data)
+        self.assertTrue(serializer.is_valid())
+        self.assertEqual(serializer.validated_data['name'], 'view_users')
+    def test_invalid_serialization(self):
+        permission_data = {'name': ''} 
+        serializer = PermissionSerializer(data=permission_data)
+        self.assertFalse(serializer.is_valid())
+        self.assertIn('name', serializer.errors)

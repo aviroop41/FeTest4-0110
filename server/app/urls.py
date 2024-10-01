@@ -10,6 +10,8 @@ urlpatterns += [
     path('api/employee/<int:employee_id>/request-leave', views.request_leave),
     path('api/employee/<int:employee_id>/notifications', views.get_notifications),
     path('api/employee/<int:employee_id>/notifications/<int:notification_id>/read', views.mark_notification_read),
+    path('api/employee/<int:employee_id>/calendar/link', views.link_employee_calendar),
+    path('api/employee/<int:employee_id>/calendar/events', views.get_calendar_events),
     path('api/manager/<int:manager_id>/team-attendance', views.get_team_attendance),
     path('api/manager/<int:manager_id>/team-leave-requests', views.get_team_leave_requests),
     path('api/manager/<int:manager_id>/leave-requests/<int:request_id>/approve', views.approve_leave_request),

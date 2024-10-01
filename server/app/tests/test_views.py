@@ -157,15 +157,29 @@ class MyViewTests(unittest.TestCase):
         response = self.client.post(reverse('create_role'), {'name': 'Test Role'})
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+    def test_create_role_invalid(self):
+        response = self.client.post(reverse('create_role'), {'invalid_key': 'Test Role'})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_update_role(self):
         role_id = 1
         response = self.client.put(reverse('update_role', args=[role_id]), {'name': 'Updated Role'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def test_update_role_not_found(self):
+        role_id = 999
+        response = self.client.put(reverse('update_role', args=[role_id]), {'name': 'Updated Role'})
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
     def test_delete_role(self):
         role_id = 1
         response = self.client.delete(reverse('delete_role', args=[role_id]))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_delete_role_not_found(self):
+        role_id = 999
+        response = self.client.delete(reverse('delete_role', args=[role_id]))
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 if __name__ == '__main__':
     unittest.main()

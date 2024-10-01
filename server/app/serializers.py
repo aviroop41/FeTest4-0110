@@ -3,6 +3,7 @@ from rest_framework import serializers
 from .models import Attendance, LeaveBalance, RecentActivity, LeaveRequest, Employee
 from .models import Notification
 from .models import Role, Permission  # New imports for roles and permissions
+from .models import CalendarIntegration, CalendarEvent  # New imports for calendar integration
 
 # Create your serializers here.
 
@@ -82,3 +83,14 @@ class PermissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Permission
         fields = ['id', 'name']
+
+# New serializer for Calendar Integration
+class CalendarIntegrationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CalendarIntegration
+        fields = ['employee', 'calendar_link']
+
+class CalendarEventSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CalendarEvent
+        fields = ['employee', 'event_date', 'event_details']

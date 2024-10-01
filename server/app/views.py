@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from .models import Attendance, LeaveBalance, RecentActivity, LeaveRequest, Employee, EmployeeProfile
 from .services.report_service import ReportService
 from .services.notification_service import fetch_notifications, mark_notification_as_read
+from .services.calendar_service import link_calendar, fetch_calendar_events
 from django.views.decorators.csrf import csrf_exempt
 import json
 from rest_framework.decorators import api_view
@@ -39,6 +40,22 @@ def delete_role(request, role_id):
         # Logic to delete the role goes here
         return JsonResponse({'status': 'Role deleted successfully'})
     return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+# Link calendar
+@api_view(['POST'])
+def link_employee_calendar(request, employee_id):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        calendar_token = data.get('calendar_token')
+        result = link_calendar(employee_id, calendar_token)
+        return JsonResponse(result)
+
+# Fetch calendar events
+@api_view(['GET'])
+def get_calendar_events(request, employee_id):
+    if request.method == 'GET':
+        result = fetch_calendar_events(employee_id)
+        return JsonResponse(result)
 
 # Existing functions... (No changes to this part)
 

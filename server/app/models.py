@@ -72,3 +72,15 @@ class Role(models.Model):
 class EmployeeRole(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
     role = models.ForeignKey(Role, on_delete=models.CASCADE)
+
+class CalendarIntegration(models.Model):
+    employee = models.OneToOneField(Employee, on_delete=models.CASCADE)
+    calendar_link = models.URLField()  # Field to store the linked calendar URL
+    linked_at = models.DateTimeField(auto_now_add=True)  # Timestamp of when the calendar was linked
+
+class CalendarEvent(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    event_title = models.CharField(max_length=255)
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)  # Timestamp of when the event was created

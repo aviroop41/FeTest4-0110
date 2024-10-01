@@ -150,3 +150,24 @@ class EmployeeRoleModelTest(TestCase):
     def test_employee_role_unique_constraint(self):
         with self.assertRaises(Exception):
             EmployeeRole.objects.create(employee=self.employee, role=self.role)
+class CalendarIntegrationModelTest(TestCase):
+    def setUp(self):
+        self.employee = Employee.objects.create(employee_id='EMP001', name='John Doe')
+        self.calendar_integration = CalendarIntegration.objects.create(employee=self.employee, calendar_link='https://calendar.example.com', linked_at='2023-01-01 10:00:00')
+    def test_calendar_integration_creation(self):
+        self.assertEqual(self.calendar_integration.employee.employee_id, 'EMP001')
+        self.assertEqual(self.calendar_integration.calendar_link, 'https://calendar.example.com')
+    def test_calendar_integration_employee_relation(self):
+        self.assertEqual(self.calendar_integration.employee.employee_id, 'EMP001')
+class CalendarEventModelTest(TestCase):
+    def setUp(self):
+        self.employee = Employee.objects.create(employee_id='EMP001', name='John Doe')
+        self.calendar_event = CalendarEvent.objects.create(employee=self.employee, event_title='Meeting', start_time='2023-01-01 09:00:00', end_time='2023-01-01 10:00:00')
+    def test_calendar_event_creation(self):
+        self.assertEqual(self.calendar_event.event_title, 'Meeting')
+        self.assertEqual(self.calendar_event.employee.employee_id, 'EMP001')
+    def test_calendar_event_employee_relation(self):
+        self.assertEqual(self.calendar_event.employee.employee_id, 'EMP001')
+    def test_calendar_event_time_validation(self):
+        with self.assertRaises(Exception):
+            CalendarEvent.objects.create(employee=self.employee, event_title='Invalid Event', start_time='2023-01-02 10:00:00', end_time='2023-01-01 10:00:00')
