@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'; // Import React and hooks
 import OrganizationDirectory from '../components/OrganizationDirectory'; // Import the OrganizationDirectory component
+import OrgStructure from '../components/OrgStructure'; // Import the OrgStructure component
 
 const OrganizationPage = () => {
     const [employees, setEmployees] = useState([]); // State to store employee data
@@ -19,6 +20,7 @@ const OrganizationPage = () => {
             } catch (err) {
                 console.error(err);
                 setError(err.message); // Handle errors
+                setEmployees(mockEmployees); // Fallback to mock data if API fails
             } finally {
                 setLoading(false); // Set loading to false
             }
@@ -36,6 +38,7 @@ const OrganizationPage = () => {
         <div className="p-4">
             <h1 className="text-3xl font-semibold mb-4">Organization Directory</h1> 
             <OrganizationDirectory employees={employees} /> {/* Pass employees to OrganizationDirectory */}
+            <OrgStructure employees={employees} /> {/* Add OrgStructure component for hierarchy visualization */}
         </div>
     );
 };
@@ -43,7 +46,6 @@ const OrganizationPage = () => {
 export default OrganizationPage; // Export the component
 
 // OrganizationDirectory Component Implementation
-
 import React from 'react'; // Import React
 
 const OrganizationDirectory = ({ employees }) => {
@@ -73,15 +75,32 @@ const OrganizationDirectory = ({ employees }) => {
 
 export default OrganizationDirectory; // Export the component
 
-// Mock API Data Handling (for fallback)
+// OrgStructure Component Implementation
+import React from 'react'; // Import React
 
+const OrgStructure = ({ employees }) => {
+    // Render organization structure visualization based on employee roles and hierarchy
+    return (
+        <div className="mt-8">
+            <h2 className="text-2xl font-semibold mb-2">Organization Structure</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {employees.map((employee) => (
+                    <div key={employee.id} className="p-4 border border-gray-200 rounded-lg shadow hover:shadow-lg transition-shadow">
+                        <h3 className="font-bold text-lg">{employee.name}</h3>
+                        <p className="text-sm">{employee.position}</p>
+                        <p className="text-xs text-gray-500">{employee.department}</p>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
+export default OrgStructure; // Export the component
+
+// Mock API Data Handling (for fallback)
 const mockEmployees = [
     { id: 1, name: 'John Doe', position: 'Software Engineer', department: 'Engineering' },
     { id: 2, name: 'Jane Smith', position: 'Product Manager', department: 'Product' },
     { id: 3, name: 'Alice Johnson', position: 'UX Designer', department: 'Design' },
 ]; // Mock employee data array
-
-// In case of API failure, use mock data
-if (employees.length === 0) {
-    setEmployees(mockEmployees); // Fallback to mock data
-}
