@@ -1,0 +1,3 @@
+django
+
+# Add any additional packages below
