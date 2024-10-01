@@ -7,6 +7,7 @@ import DashboardPage from './pages/DashboardPage';
 import MePage from './pages/MePage';
 import MyTeamPage from './pages/MyTeamPage';
 import OrganizationPage from './pages/OrganizationPage';
+import ProfilePage from './pages/ProfilePage';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Link to="/me">Me</Link>
         <Link to="/my-team">My Team</Link>
         <Link to="/organization">Organization</Link>
+        <Link to="/profile">Profile</Link>
       </nav>
       <Routes>
         <Route path="/app" element={<AppPage />} />
@@ -26,6 +28,7 @@ function App() {
         <Route path="/me" element={<MePage />} />
         <Route path="/my-team" element={<MyTeamPage />} />
         <Route path="/organization" element={<OrganizationPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Routes>
       <Footer />
     </Router>
