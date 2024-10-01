@@ -11,3 +11,7 @@ django-rest-framework
 # Added for organization structure functionalities
 
 Django-REST-Framework
+
+# Added for employee profile functionalities
+
+django-rest-framework

@@ -44,3 +44,11 @@ class OrganizationDirectory(models.Model):
 class OrganizationStructure(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='subordinates')
     manager = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='managers')
+
+# New Model for employee profile updates
+class EmployeeProfile(models.Model):
+    employee = models.OneToOneField(Employee, on_delete=models.CASCADE)
+    address = models.TextField(null=True, blank=True)
+    phone_number = models.CharField(max_length=15, null=True, blank=True)
+    email = models.EmailField(null=True, blank=True)
+    position = models.CharField(max_length=100, null=True, blank=True)

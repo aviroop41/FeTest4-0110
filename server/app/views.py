@@ -63,3 +63,24 @@ def get_organization_structure(request):
     for employee in employees:
         structure.append({'id': employee.id, 'name': employee.name, 'manager_id': employee.manager_id})
     return JsonResponse(structure, safe=False)
+
+
+def get_employee_profile(request, employee_id):
+    try:
+        employee = Employee.objects.get(id=employee_id)
+        return JsonResponse({'employee_id': employee.employee_id, 'name': employee.name})
+    except Employee.DoesNotExist:
+        return JsonResponse({'error': 'Employee not found'}, status=404)
+
+
+def update_employee_profile(request, employee_id):
+    if request.method == 'PUT':
+        try:
+            employee = Employee.objects.get(id=employee_id)
+            data = json.loads(request.body)
+            employee.name = data.get('name', employee.name)
+            employee.save()
+            return JsonResponse({'status': 'Profile updated successfully'})
+        except Employee.DoesNotExist:
+            return JsonResponse({'error': 'Employee not found'}, status=404)
+    return JsonResponse({'error': 'Invalid request method'}, status=400)

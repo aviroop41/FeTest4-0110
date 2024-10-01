@@ -139,3 +139,27 @@ class UrlsTestCase(TestCase):
         url = reverse('get_organization_structure')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 500)
+
+    def test_get_employee_profile(self):
+        url = reverse('get_employee_profile', args=[1])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_employee_profile_nonexistent(self):
+        url = reverse('get_employee_profile', args=[9999])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
+
+    @patch('app.views.update_employee_profile')
+    def test_update_employee_profile_invalid(self, mock_update):
+        mock_update.side_effect = Exception('Invalid Profile Data')
+        url = reverse('update_employee_profile', args=[-1])
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 400)
+
+    @patch('app.views.update_employee_profile')
+    def test_update_employee_profile_nonexistent(self, mock_update):
+        mock_update.side_effect = Exception('Invalid Employee ID')
+        url = reverse('update_employee_profile', args=[9999])
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 404)

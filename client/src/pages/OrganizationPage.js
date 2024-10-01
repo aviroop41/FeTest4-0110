@@ -46,57 +46,6 @@ const OrganizationPage = () => {
 export default OrganizationPage; // Export the component
 
 // OrganizationDirectory Component Implementation
-import React from 'react'; // Import React
-
-const OrganizationDirectory = ({ employees }) => {
-    return (
-        <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                    <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Position</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Department</th>
-                    </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                    {employees.map((employee) => (
-                        <tr key={employee.id}>
-                            <td className="px-6 py-4 whitespace-nowrap">{employee.name}</td>
-                            <td className="px-6 py-4 whitespace-nowrap">{employee.position}</td>
-                            <td className="px-6 py-4 whitespace-nowrap">{employee.department}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
-    );
-};
-
-export default OrganizationDirectory; // Export the component
-
-// OrgStructure Component Implementation
-import React from 'react'; // Import React
-
-const OrgStructure = ({ employees }) => {
-    // Render organization structure visualization based on employee roles and hierarchy
-    return (
-        <div className="mt-8">
-            <h2 className="text-2xl font-semibold mb-2">Organization Structure</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {employees.map((employee) => (
-                    <div key={employee.id} className="p-4 border border-gray-200 rounded-lg shadow hover:shadow-lg transition-shadow">
-                        <h3 className="font-bold text-lg">{employee.name}</h3>
-                        <p className="text-sm">{employee.position}</p>
-                        <p className="text-xs text-gray-500">{employee.department}</p>
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
-};
-
-export default OrgStructure; // Export the component
 
 // Mock API Data Handling (for fallback)
 const mockEmployees = [

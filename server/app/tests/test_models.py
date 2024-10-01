@@ -1,5 +1,5 @@
 from django.test import TestCase
-from .models import Employee, Attendance, LeaveBalance, RecentActivity, LeaveRequest, TeamAttendance, TeamLeaveRequest, TeamLeaveRequest, OrganizationDirectory, OrganizationStructure
+from .models import Employee, Attendance, LeaveBalance, RecentActivity, LeaveRequest, TeamAttendance, TeamLeaveRequest, OrganizationDirectory, OrganizationStructure, EmployeeProfile
 
 class EmployeeModelTest(TestCase):
     def setUp(self):
@@ -110,3 +110,24 @@ class OrganizationStructureModelTest(TestCase):
     def test_organization_structure_creation(self):
         self.assertEqual(self.organization_structure.employee.employee_id, 'EMP001')
         self.assertEqual(self.organization_structure.manager.employee_id, 'EMP002')
+
+class EmployeeProfileModelTest(TestCase):
+    def setUp(self):
+        self.employee = Employee.objects.create(employee_id='EMP001', name='John Doe')
+        self.employee_profile = EmployeeProfile.objects.create(employee=self.employee, address='123 Main St', phone_number='1234567890', email='john.doe@example.com', position='Developer')
+
+    def test_employee_profile_creation(self):
+        self.assertEqual(self.employee_profile.address, '123 Main St')
+        self.assertEqual(self.employee_profile.phone_number, '1234567890')
+        self.assertEqual(self.employee_profile.email, 'john.doe@example.com')
+        self.assertEqual(self.employee_profile.position, 'Developer')
+
+    def test_employee_profile_employee_relation(self):
+        self.assertEqual(self.employee_profile.employee.employee_id, 'EMP001')
+
+    def test_employee_profile_blank_fields(self):
+        profile = EmployeeProfile.objects.create(employee=self.employee)
+        self.assertIsNone(profile.address)
+        self.assertIsNone(profile.phone_number)
+        self.assertIsNone(profile.email)
+        self.assertIsNone(profile.position)

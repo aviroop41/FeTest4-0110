@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from unittest.mock import patch, MagicMock
-from .models import Attendance, Leave, Activity, LeaveRequest
+from .models import Attendance, Leave, Activity, LeaveRequest, Employee
 
 class AttendanceViewsTests(TestCase):
 
@@ -142,14 +142,51 @@ class AttendanceViewsTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), [{'id': 1, 'name': 'John Doe'}])
 
-    @patch('app.models.Employee.objects.filter')
-    def test_get_organization_structure(self, mock_filter):
-        mock_manager = MagicMock()
-        mock_manager.name = 'Manager 1'
-        mock_filter.return_value = [mock_manager]
-        mock_filter.side_effect = [MagicMock(), MagicMock()]  
-        mock_filter.return_value.values.return_value = [{'id': 1, 'name': 'Employee 1'}]
+    @patch('app.models.Employee.objects.all')
+    def test_get_organization_structure(self, mock_all):
+        mock_employee = MagicMock(id=1, name='Employee 1', manager_id=None)
+        mock_all.return_value = [mock_employee]
         response = self.client.get(reverse('get_organization_structure'))
         self.assertEqual(response.status_code, 200)
-        self.assertIn('manager', response.json()[0])
-        self.assertIn('team', response.json()[0])
+        self.assertEqual(response.json(), [{'id': 1, 'name': 'Employee 1', 'manager_id': None}])
+
+    @patch('app.models.Employee.objects.get')
+    def test_get_employee_profile_success(self, mock_get):
+        mock_employee = MagicMock(employee_id=1, name='John Doe')
+        mock_get.return_value = mock_employee
+        response = self.client.get(reverse('get_employee_profile', args=[1]))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {'employee_id': 1, 'name': 'John Doe'})
+
+    @patch('app.models.Employee.objects.get')
+    def test_get_employee_profile_not_found(self, mock_get):
+        mock_get.side_effect = Employee.DoesNotExist
+        response = self.client.get(reverse('get_employee_profile', args=[999]))
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.json(), {'error': 'Employee not found'})
+
+    @patch('app.models.Employee.objects.get')
+    @patch('json.loads')
+    def test_update_employee_profile_success(self, mock_json_loads, mock_get):
+        mock_employee = MagicMock(employee_id=1, name='John Doe')
+        mock_get.return_value = mock_employee
+        mock_json_loads.return_value = {'name': 'Jane Doe'}
+        response = self.client.put(reverse('update_employee_profile', args=[1]), data='{}', content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {'status': 'Profile updated successfully', 'employee_id': 1, 'name': 'Jane Doe'})
+
+    @patch('app.models.Employee.objects.get')
+    def test_update_employee_profile_not_found(self, mock_get):
+        mock_get.side_effect = Employee.DoesNotExist
+        response = self.client.put(reverse('update_employee_profile', args=[999]), data='{}', content_type='application/json')
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.json(), {'error': 'Employee not found'})
+
+    @patch('app.models.Employee.objects.get')
+    @patch('json.loads')
+    def test_update_employee_profile_invalid_json(self, mock_json_loads, mock_get):
+        mock_get.return_value = MagicMock()
+        mock_json_loads.side_effect = json.JSONDecodeError
+        response = self.client.put(reverse('update_employee_profile', args=[1]), data='{}', content_type='application/json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), {'error': 'Invalid JSON'})

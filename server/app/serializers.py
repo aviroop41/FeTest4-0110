@@ -54,3 +54,8 @@ class OrganizationStructureSerializer(serializers.ModelSerializer):
         model = Employee
         fields = ['employee_id', 'name']
         depth = 1
+
+class EmployeeProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Employee
+        fields = ['employee_id', 'name']
