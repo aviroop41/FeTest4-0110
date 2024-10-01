@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from .models import Attendance, LeaveBalance, RecentActivity, LeaveRequest, Employee
+from .models import Notification
 
 # Create your serializers here.
 
@@ -64,3 +65,8 @@ class AttendanceReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attendance
         fields = ['employee', 'date', 'status']
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = ['id', 'employee', 'message', 'is_read', 'created_at']

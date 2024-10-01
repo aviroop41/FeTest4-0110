@@ -23,3 +23,7 @@ pandas
 # Added for date handling
 
 datetime
+
+# Added for notifications functionality
+
+channels

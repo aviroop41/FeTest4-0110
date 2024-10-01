@@ -183,3 +183,23 @@ class UrlsTestCase(TestCase):
         url = reverse('get_organization_structure')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+
+    def test_get_notifications(self):
+        url = reverse('get_notifications', args=[1])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_notifications_invalid_employee(self):
+        url = reverse('get_notifications', args=[-1])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 400)
+
+    def test_mark_notification_as_read(self):
+        url = reverse('mark_notification_as_read', args=[1, 1])
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_mark_notification_as_read_invalid(self):
+        url = reverse('mark_notification_as_read', args=[1, -1])
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 400)

@@ -58,3 +58,9 @@ class AttendanceReport(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     report_data = models.JSONField()  # Store structured data for attendance
+
+class Notification(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    message = models.TextField()
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)

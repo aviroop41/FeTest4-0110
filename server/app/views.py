@@ -5,8 +5,23 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from .models import Attendance, LeaveBalance, RecentActivity, LeaveRequest, Employee
 from .services.report_service import ReportService
+from .services.notification_service import fetch_notifications, mark_notification_as_read
 from datetime import datetime
 
+
+def get_notifications(request, employee_id):
+    notifications = fetch_notifications(employee_id)
+    return JsonResponse(list(notifications.values()), safe=False)
+
+
+def mark_notification_read(request, employee_id, notification_id):
+    if request.method == 'POST':
+        success = mark_notification_as_read(notification_id)
+        if success:
+            return JsonResponse({'status': 'Notification marked as read'})
+        return JsonResponse({'error': 'Notification not found'}, status=404)
+
+# Existing functions... (No changes to this part)
 
 def get_attendance(request, employee_id):
     attendance_data = Attendance.objects.filter(employee_id=employee_id)

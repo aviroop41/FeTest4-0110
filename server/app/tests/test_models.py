@@ -1,5 +1,5 @@
 from django.test import TestCase
-from .models import Employee, Attendance, LeaveBalance, RecentActivity, LeaveRequest, TeamAttendance, TeamLeaveRequest, OrganizationDirectory, OrganizationStructure, EmployeeProfile, AttendanceReport
+from .models import Employee, Attendance, LeaveBalance, RecentActivity, LeaveRequest, TeamAttendance, TeamLeaveRequest, OrganizationDirectory, OrganizationStructure, EmployeeProfile, AttendanceReport, Notification
 
 class EmployeeModelTest(TestCase):
     def setUp(self):
@@ -144,3 +144,22 @@ class AttendanceReportModelTest(TestCase):
     def test_attendance_report_date_range(self):
         self.assertEqual(self.attendance_report.start_date, '2023-01-01')
         self.assertEqual(self.attendance_report.end_date, '2023-01-31')
+
+class NotificationModelTest(TestCase):
+    def setUp(self):
+        self.employee = Employee.objects.create(employee_id='EMP001', name='John Doe')
+        self.notification = Notification.objects.create(employee=self.employee, message='Test Notification')
+
+    def test_notification_creation(self):
+        self.assertEqual(self.notification.message, 'Test Notification')
+        self.assertEqual(self.notification.employee, self.employee)
+        self.assertFalse(self.notification.is_read)
+        self.assertIsNotNone(self.notification.created_at)
+
+    def test_notification_employee_relation(self):
+        self.assertEqual(self.notification.employee.employee_id, 'EMP001')
+
+    def test_notification_read_status(self):
+        self.notification.is_read = True
+        self.notification.save()
+        self.assertTrue(Notification.objects.get(id=self.notification.id).is_read)
