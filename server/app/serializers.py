@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from .models import Attendance, LeaveBalance, RecentActivity, LeaveRequest, Employee
 from .models import Notification
+from .models import Role, Permission  # New imports for roles and permissions
 
 # Create your serializers here.
 
@@ -70,3 +71,14 @@ class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
         fields = ['id', 'employee', 'message', 'is_read', 'created_at']
+
+# New serializers for Role and Permission management
+class RoleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Role
+        fields = ['id', 'name', 'permissions']
+
+class PermissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Permission
+        fields = ['id', 'name']

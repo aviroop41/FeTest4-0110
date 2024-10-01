@@ -64,3 +64,11 @@ class Notification(models.Model):
     message = models.TextField()
     is_read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+
+class Role(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    permissions = models.JSONField(default=list)  # Store permissions as a JSON list
+
+class EmployeeRole(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    role = models.ForeignKey(Role, on_delete=models.CASCADE)

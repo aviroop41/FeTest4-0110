@@ -27,3 +27,7 @@ datetime
 # Added for notifications functionality
 
 channels
+
+# Added for role and permission management functionalities
+
+Django-Guardian

@@ -203,3 +203,27 @@ class UrlsTestCase(TestCase):
         url = reverse('mark_notification_as_read', args=[1, -1])
         response = self.client.post(url)
         self.assertEqual(response.status_code, 400)
+    
+    def test_get_all_roles(self):
+        url = reverse('get_all_roles')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_create_role(self):
+        url = reverse('create_role')
+        response = self.client.post(url, data={'name': 'New Role'})
+        self.assertEqual(response.status_code, 201)
+
+    @patch('app.views.update_role_permissions')
+    def test_update_role_permissions_invalid(self, mock_update):
+        mock_update.side_effect = Exception('Invalid Role ID')
+        url = reverse('update_role_permissions', args=[-1])
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 400)
+
+    @patch('app.views.delete_role')
+    def test_delete_role_invalid(self, mock_delete):
+        mock_delete.side_effect = Exception('Invalid Role ID')
+        url = reverse('delete_role', args=[-1])
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, 400)
