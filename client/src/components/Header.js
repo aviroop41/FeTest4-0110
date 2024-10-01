@@ -45,19 +45,3 @@ const Header = () => {
 };
 
 export default Header;
-
-import React from 'react';
-
-const Footer = () => {
-    return (
-        <footer className="bg-gray-200 py-4 text-center">
-            <div className="container mx-auto">
-                <a href="/privacy-policy" className="mx-2 text-blue-500 hover:underline">Privacy Policy</a>
-                <a href="/terms-of-service" className="mx-2 text-blue-500 hover:underline">Terms of Service</a>
-                <a href="/contact" className="mx-2 text-blue-500 hover:underline">Contact Us</a>
-            </div>
-        </footer>
-    );
-};
-
-export default Footer;

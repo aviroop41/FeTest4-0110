@@ -67,3 +67,51 @@ class UrlsTestCase(TestCase):
         url = reverse('request_leave', args=[9999])
         response = self.client.post(url)
         self.assertEqual(response.status_code, 404)
+    
+    def test_get_team_attendance(self):
+        url = reverse('get_team_attendance', args=[1])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_team_leave_requests(self):
+        url = reverse('get_team_leave_requests', args=[1])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_approve_leave_request(self):
+        url = reverse('approve_leave_request', args=[1, 1])
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_deny_leave_request(self):
+        url = reverse('deny_leave_request', args=[1, 1])
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 200)
+
+    @patch('app.views.get_team_attendance')
+    def test_get_team_attendance_invalid_manager_id(self, mock_get):
+        mock_get.side_effect = Exception('Invalid Manager ID')
+        url = reverse('get_team_attendance', args=[-1])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 400)
+
+    @patch('app.views.get_team_leave_requests')
+    def test_get_team_leave_requests_invalid_manager_id(self, mock_get):
+        mock_get.side_effect = Exception('Invalid Manager ID')
+        url = reverse('get_team_leave_requests', args=[-1])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 400)
+
+    @patch('app.views.approve_leave_request')
+    def test_approve_leave_request_invalid(self, mock_approve):
+        mock_approve.side_effect = Exception('Invalid Leave Request')
+        url = reverse('approve_leave_request', args=[1, -1])
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 400)
+
+    @patch('app.views.deny_leave_request')
+    def test_deny_leave_request_invalid(self, mock_deny):
+        mock_deny.side_effect = Exception('Invalid Leave Request')
+        url = reverse('deny_leave_request', args=[1, -1])
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 400)

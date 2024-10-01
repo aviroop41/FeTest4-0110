@@ -27,3 +27,11 @@ class LeaveRequest(models.Model):
     end_date = models.DateField()
     reason = models.CharField(max_length=255)
     status = models.CharField(max_length=50, default='Pending')
+
+class TeamAttendance(models.Model):
+    manager = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    attendance_records = models.ManyToManyField(Attendance)
+
+class TeamLeaveRequest(models.Model):
+    manager = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    leave_request = models.ForeignKey(LeaveRequest, on_delete=models.CASCADE)

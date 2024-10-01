@@ -3,7 +3,7 @@ from django.shortcuts import render
 # Create your views here.
 
 from django.http import JsonResponse
-from .models import Attendance, LeaveBalance, RecentActivity
+from .models import Attendance, LeaveBalance, RecentActivity, LeaveRequest
 
 
 def get_attendance(request, employee_id):
@@ -26,3 +26,27 @@ def request_leave(request, employee_id):
         # Assume some logic to handle leave request
         return JsonResponse({'status': 'Leave request submitted'}), 201
     return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+
+def get_team_attendance(request, manager_id):
+    team_attendance = Attendance.objects.filter(employee__manager_id=manager_id)
+    return JsonResponse(list(team_attendance.values()), safe=False)
+
+
+def get_team_leave_requests(request, manager_id):
+    team_leave_requests = LeaveRequest.objects.filter(employee__manager_id=manager_id)
+    return JsonResponse(list(team_leave_requests.values()), safe=False)
+
+
+def approve_leave_request(request, manager_id, request_id):
+    leave_request = LeaveRequest.objects.get(id=request_id)
+    leave_request.status = 'Approved'
+    leave_request.save()
+    return JsonResponse({'status': 'Leave request approved'})
+
+
+def deny_leave_request(request, manager_id, request_id):
+    leave_request = LeaveRequest.objects.get(id=request_id)
+    leave_request.status = 'Denied'
+    leave_request.save()
+    return JsonResponse({'status': 'Leave request denied'})

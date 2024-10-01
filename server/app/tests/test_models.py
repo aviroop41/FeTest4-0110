@@ -1,5 +1,5 @@
 from django.test import TestCase
-from .models import Employee, Attendance, LeaveBalance, RecentActivity, LeaveRequest
+from .models import Employee, Attendance, LeaveBalance, RecentActivity, LeaveRequest, TeamAttendance, TeamLeaveRequest
 
 class EmployeeModelTest(TestCase):
     def setUp(self):
@@ -67,3 +67,26 @@ class LeaveRequestModelTest(TestCase):
 
     def test_leave_request_employee_relation(self):
         self.assertEqual(self.leave_request.employee.employee_id, 'EMP001')
+
+class TeamAttendanceModelTest(TestCase):
+    def setUp(self):
+        self.manager = Employee.objects.create(employee_id='EMP002', name='Jane Smith')
+        self.employee = Employee.objects.create(employee_id='EMP001', name='John Doe')
+        self.attendance = Attendance.objects.create(employee=self.employee, date='2023-01-01', status='Present')
+        self.team_attendance = TeamAttendance.objects.create(manager=self.manager)
+        self.team_attendance.attendance_records.add(self.attendance)
+
+    def test_team_attendance_creation(self):
+        self.assertIn(self.attendance, self.team_attendance.attendance_records.all())
+        self.assertEqual(self.team_attendance.manager.name, 'Jane Smith')
+
+class TeamLeaveRequestModelTest(TestCase):
+    def setUp(self):
+        self.manager = Employee.objects.create(employee_id='EMP002', name='Jane Smith')
+        self.employee = Employee.objects.create(employee_id='EMP001', name='John Doe')
+        self.leave_request = LeaveRequest.objects.create(employee=self.employee, start_date='2023-01-01', end_date='2023-01-05', reason='Vacation', status='Pending')
+        self.team_leave_request = TeamLeaveRequest.objects.create(manager=self.manager, leave_request=self.leave_request)
+
+    def test_team_leave_request_creation(self):
+        self.assertEqual(self.team_leave_request.manager.name, 'Jane Smith')
+        self.assertEqual(self.team_leave_request.leave_request.reason, 'Vacation')

@@ -3,3 +3,7 @@ django
 # Add any additional packages below
 
 rest-framework
+
+# Added for new functionalities
+
+django-rest-framework
