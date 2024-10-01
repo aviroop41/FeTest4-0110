@@ -1,3 +1,5 @@
 django
 
 # Add any additional packages below
+
+rest-framework

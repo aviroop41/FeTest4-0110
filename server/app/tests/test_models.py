@@ -1,5 +1,5 @@
 from django.test import TestCase
-from .models import Employee, Attendance, LeaveBalance, RecentActivity
+from .models import Employee, Attendance, LeaveBalance, RecentActivity, LeaveRequest
 
 class EmployeeModelTest(TestCase):
     def setUp(self):
@@ -50,3 +50,20 @@ class RecentActivityModelTest(TestCase):
 
     def test_recent_activity_employee_relation(self):
         self.assertEqual(self.activity.employee.employee_id, 'EMP001')
+
+class LeaveRequestModelTest(TestCase):
+    def setUp(self):
+        self.employee = Employee.objects.create(employee_id='EMP001', name='John Doe')
+        self.leave_request = LeaveRequest.objects.create(employee=self.employee, start_date='2023-01-01', end_date='2023-01-05', reason='Vacation', status='Pending')
+
+    def test_leave_request_creation(self):
+        self.assertEqual(self.leave_request.reason, 'Vacation')
+        self.assertEqual(self.leave_request.status, 'Pending')
+        self.assertEqual(self.leave_request.employee, self.employee)
+
+    def test_leave_request_date_validation(self):
+        with self.assertRaises(Exception):
+            LeaveRequest.objects.create(employee=self.employee, start_date='2023-01-10', end_date='2023-01-05', reason='Invalid Dates')
+
+    def test_leave_request_employee_relation(self):
+        self.assertEqual(self.leave_request.employee.employee_id, 'EMP001')

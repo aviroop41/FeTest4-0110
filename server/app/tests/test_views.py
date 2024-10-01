@@ -52,3 +52,24 @@ class AttendanceViewsTests(TestCase):
         response = self.client.get(reverse('get_recent_activities', args=[2]))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {'recent_activities': []})
+
+    @patch('app.models.Leave.objects.filter')
+    def test_request_leave_success(self, mock_filter):
+        mock_filter.return_value.first.return_value = None
+        data = {'leave_type': 'sick', 'start_date': '2023-10-10', 'end_date': '2023-10-15'}
+        response = self.client.post(reverse('request_leave', args=[1]), data=data, content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json(), {'status': 'Leave request submitted successfully.'})
+
+    @patch('app.models.Leave.objects.filter')
+    def test_request_leave_invalid_method(self, mock_filter):
+        response = self.client.get(reverse('request_leave', args=[1]))
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), {'error': 'Invalid request method.'})
+
+    @patch('app.models.Leave.objects.filter')
+    def test_request_leave_missing_fields(self, mock_filter):
+        data = {'leave_type': 'sick'}  
+        response = self.client.post(reverse('request_leave', args=[1]), data=data, content_type='application/json')
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('error', response.json())
