@@ -5,6 +5,7 @@ import Footer from './components/Footer';
 import AppPage from './pages/App';
 import DashboardPage from './pages/DashboardPage';
 import MePage from './pages/MePage';
+import MyTeamPage from './pages/MyTeamPage';
 
 function App() {
   return (
@@ -15,11 +16,13 @@ function App() {
         <Link to="/app">App</Link>
         <Link to="/dashboard">Dashboard</Link>
         <Link to="/me">Me</Link>
+        <Link to="/my-team">My Team</Link>
       </nav>
       <Routes>
         <Route path="/app" element={<AppPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/me" element={<MePage />} />
+        <Route path="/my-team" element={<MyTeamPage />} />
       </Routes>
       <Footer />
     </Router>
