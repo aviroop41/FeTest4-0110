@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'; // Import React and hooks
 import OrganizationDirectory from '../components/OrganizationDirectory'; // Import the OrganizationDirectory component
 import OrgStructure from '../components/OrgStructure'; // Import the OrgStructure component
+import RoleManagement from '../components/RoleManagement'; // Import the RoleManagement component
 
 const OrganizationPage = () => {
     const [employees, setEmployees] = useState([]); // State to store employee data
@@ -39,17 +40,16 @@ const OrganizationPage = () => {
             <h1 className="text-3xl font-semibold mb-4">Organization Directory</h1> 
             <OrganizationDirectory employees={employees} /> {/* Pass employees to OrganizationDirectory */}
             <OrgStructure employees={employees} /> {/* Add OrgStructure component for hierarchy visualization */}
+            <RoleManagement /> {/* Add RoleManagement component for managing roles */}
         </div>
     );
 };
 
 export default OrganizationPage; // Export the component
 
-// OrganizationDirectory Component Implementation
-
 // Mock API Data Handling (for fallback)
 const mockEmployees = [
     { id: 1, name: 'John Doe', position: 'Software Engineer', department: 'Engineering' },
     { id: 2, name: 'Jane Smith', position: 'Product Manager', department: 'Product' },
     { id: 3, name: 'Alice Johnson', position: 'UX Designer', department: 'Design' },
-]; // Mock employee data array
+]; // Mock employee data array. 
