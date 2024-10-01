@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Attendance, LeaveBalance, RecentActivity, LeaveRequest
+from .models import Attendance, LeaveBalance, RecentActivity, LeaveRequest, Employee
 
 # Create your serializers here.
 
@@ -38,3 +38,19 @@ class TeamLeaveRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = LeaveRequest
         fields = ['employee', 'start_date', 'end_date', 'reason', 'status']
+
+class EmployeeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Employee
+        fields = ['employee_id', 'name']
+
+class OrganizationDirectorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Employee
+        fields = '__all__'
+
+class OrganizationStructureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Employee
+        fields = ['employee_id', 'name']
+        depth = 1

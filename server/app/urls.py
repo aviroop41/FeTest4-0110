@@ -12,4 +12,6 @@ urlpatterns += [
     path('api/manager/<int:manager_id>/team-leave-requests', views.get_team_leave_requests),
     path('api/manager/<int:manager_id>/leave-requests/<int:request_id>/approve', views.approve_leave_request),
     path('api/manager/<int:manager_id>/leave-requests/<int:request_id>/deny', views.deny_leave_request),
+    path('api/organization/directory', views.get_organization_directory),
+    path('api/organization/structure', views.get_organization_structure),
 ]

@@ -134,3 +134,22 @@ class AttendanceViewsTests(TestCase):
         mock_get.side_effect = LeaveRequest.DoesNotExist
         response = self.client.post(reverse('deny_leave_request', args=[1, 999]))
         self.assertEqual(response.status_code, 404)
+
+    @patch('app.models.Employee.objects.all')
+    def test_get_organization_directory(self, mock_all):
+        mock_all.return_value.values.return_value = [{'id': 1, 'name': 'John Doe'}]
+        response = self.client.get(reverse('get_organization_directory'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), [{'id': 1, 'name': 'John Doe'}])
+
+    @patch('app.models.Employee.objects.filter')
+    def test_get_organization_structure(self, mock_filter):
+        mock_manager = MagicMock()
+        mock_manager.name = 'Manager 1'
+        mock_filter.return_value = [mock_manager]
+        mock_filter.side_effect = [MagicMock(), MagicMock()]  
+        mock_filter.return_value.values.return_value = [{'id': 1, 'name': 'Employee 1'}]
+        response = self.client.get(reverse('get_organization_structure'))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('manager', response.json()[0])
+        self.assertIn('team', response.json()[0])

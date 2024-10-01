@@ -35,3 +35,12 @@ class TeamAttendance(models.Model):
 class TeamLeaveRequest(models.Model):
     manager = models.ForeignKey(Employee, on_delete=models.CASCADE)
     leave_request = models.ForeignKey(LeaveRequest, on_delete=models.CASCADE)
+
+class OrganizationDirectory(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    position = models.CharField(max_length=255)
+    department = models.CharField(max_length=255)
+
+class OrganizationStructure(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='subordinates')
+    manager = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='managers')

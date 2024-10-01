@@ -7,3 +7,7 @@ rest-framework
 # Added for new functionalities
 
 django-rest-framework
+
+# Added for organization structure functionalities
+
+Django-REST-Framework

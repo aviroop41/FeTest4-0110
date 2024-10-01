@@ -1,7 +1,7 @@
 from django.test import TestCase
 from rest_framework.exceptions import ValidationError
-from app.models import Attendance, LeaveBalance, Activity, Leave
-from app.serializers import AttendanceSerializer, LeaveBalanceSerializer, RecentActivitiesSerializer, LeaveRequestSerializer, AttendanceDetailSerializer, TeamAttendanceSerializer, TeamLeaveRequestSerializer
+from app.models import Attendance, LeaveBalance, Activity, Leave, Employee
+from app.serializers import AttendanceSerializer, LeaveBalanceSerializer, RecentActivitiesSerializer, LeaveRequestSerializer, AttendanceDetailSerializer, TeamAttendanceSerializer, TeamLeaveRequestSerializer, EmployeeSerializer, OrganizationDirectorySerializer, OrganizationStructureSerializer
 class AttendanceSerializerTest(TestCase):
     def test_valid_serialization(self):
         attendance_data = {'user': 1, 'status': 'present', 'date': '2023-10-01'}
@@ -79,3 +79,35 @@ class TeamLeaveRequestSerializerTest(TestCase):
         serializer = TeamLeaveRequestSerializer(data=team_leave_request_data)
         self.assertFalse(serializer.is_valid())
         self.assertIn('end_date', serializer.errors)
+class EmployeeSerializerTest(TestCase):
+    def test_valid_serialization(self):
+        employee_data = {'employee_id': 1, 'name': 'John Doe'}
+        serializer = EmployeeSerializer(data=employee_data)
+        self.assertTrue(serializer.is_valid())
+        self.assertEqual(serializer.validated_data['name'], 'John Doe')
+    def test_invalid_serialization(self):
+        employee_data = {'employee_id': '', 'name': 'John Doe'}
+        serializer = EmployeeSerializer(data=employee_data)
+        self.assertFalse(serializer.is_valid())
+        self.assertIn('employee_id', serializer.errors)
+class OrganizationDirectorySerializerTest(TestCase):
+    def test_valid_serialization(self):
+        organization_data = {'employee_id': 1, 'name': 'John Doe', 'department': 'Engineering', 'position': 'Software Engineer'}
+        serializer = OrganizationDirectorySerializer(data=organization_data)
+        self.assertTrue(serializer.is_valid())
+    def test_invalid_serialization(self):
+        organization_data = {'employee_id': 1, 'name': ''}
+        serializer = OrganizationDirectorySerializer(data=organization_data)
+        self.assertFalse(serializer.is_valid())
+        self.assertIn('name', serializer.errors)
+class OrganizationStructureSerializerTest(TestCase):
+    def test_valid_serialization(self):
+        structure_data = {'employee_id': 1, 'name': 'John Doe'}
+        serializer = OrganizationStructureSerializer(data=structure_data)
+        self.assertTrue(serializer.is_valid())
+        self.assertEqual(serializer.validated_data['name'], 'John Doe')
+    def test_invalid_serialization(self):
+        structure_data = {'employee_id': '', 'name': 'John Doe'}
+        serializer = OrganizationStructureSerializer(data=structure_data)
+        self.assertFalse(serializer.is_valid())
+        self.assertIn('employee_id', serializer.errors)

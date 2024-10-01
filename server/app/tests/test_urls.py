@@ -115,3 +115,27 @@ class UrlsTestCase(TestCase):
         url = reverse('deny_leave_request', args=[1, -1])
         response = self.client.post(url)
         self.assertEqual(response.status_code, 400)
+    
+    def test_get_organization_directory(self):
+        url = reverse('get_organization_directory')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_organization_structure(self):
+        url = reverse('get_organization_structure')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    @patch('app.views.get_organization_directory')
+    def test_get_organization_directory_error(self, mock_get):
+        mock_get.side_effect = Exception('Error occurred')
+        url = reverse('get_organization_directory')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 500)
+
+    @patch('app.views.get_organization_structure')
+    def test_get_organization_structure_error(self, mock_get):
+        mock_get.side_effect = Exception('Error occurred')
+        url = reverse('get_organization_structure')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 500)

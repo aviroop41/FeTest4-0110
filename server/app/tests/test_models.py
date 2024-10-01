@@ -1,5 +1,5 @@
 from django.test import TestCase
-from .models import Employee, Attendance, LeaveBalance, RecentActivity, LeaveRequest, TeamAttendance, TeamLeaveRequest
+from .models import Employee, Attendance, LeaveBalance, RecentActivity, LeaveRequest, TeamAttendance, TeamLeaveRequest, TeamLeaveRequest, OrganizationDirectory, OrganizationStructure
 
 class EmployeeModelTest(TestCase):
     def setUp(self):
@@ -90,3 +90,23 @@ class TeamLeaveRequestModelTest(TestCase):
     def test_team_leave_request_creation(self):
         self.assertEqual(self.team_leave_request.manager.name, 'Jane Smith')
         self.assertEqual(self.team_leave_request.leave_request.reason, 'Vacation')
+
+class OrganizationDirectoryModelTest(TestCase):
+    def setUp(self):
+        self.employee = Employee.objects.create(employee_id='EMP001', name='John Doe')
+        self.organization_directory = OrganizationDirectory.objects.create(employee=self.employee, position='Developer', department='Engineering')
+
+    def test_organization_directory_creation(self):
+        self.assertEqual(self.organization_directory.position, 'Developer')
+        self.assertEqual(self.organization_directory.department, 'Engineering')
+        self.assertEqual(self.organization_directory.employee.employee_id, 'EMP001')
+
+class OrganizationStructureModelTest(TestCase):
+    def setUp(self):
+        self.manager = Employee.objects.create(employee_id='EMP002', name='Jane Smith')
+        self.employee = Employee.objects.create(employee_id='EMP001', name='John Doe')
+        self.organization_structure = OrganizationStructure.objects.create(employee=self.employee, manager=self.manager)
+
+    def test_organization_structure_creation(self):
+        self.assertEqual(self.organization_structure.employee.employee_id, 'EMP001')
+        self.assertEqual(self.organization_structure.manager.employee_id, 'EMP002')

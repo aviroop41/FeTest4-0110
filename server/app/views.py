@@ -3,7 +3,7 @@ from django.shortcuts import render
 # Create your views here.
 
 from django.http import JsonResponse
-from .models import Attendance, LeaveBalance, RecentActivity, LeaveRequest
+from .models import Attendance, LeaveBalance, RecentActivity, LeaveRequest, Employee
 
 
 def get_attendance(request, employee_id):
@@ -17,7 +17,7 @@ def get_leave_balance(request, employee_id):
 
 
 def get_recent_activities(request, employee_id):
-    recent_activities = Activity.objects.filter(employee_id=employee_id).order_by('-date')[:5]
+    recent_activities = RecentActivity.objects.filter(employee_id=employee_id).order_by('-timestamp')[:5]
     return JsonResponse(list(recent_activities.values()), safe=False)
 
 
@@ -50,3 +50,16 @@ def deny_leave_request(request, manager_id, request_id):
     leave_request.status = 'Denied'
     leave_request.save()
     return JsonResponse({'status': 'Leave request denied'})
+
+
+def get_organization_directory(request):
+    employees = Employee.objects.all()
+    return JsonResponse(list(employees.values()), safe=False)
+
+
+def get_organization_structure(request):
+    employees = Employee.objects.all()
+    structure = []
+    for employee in employees:
+        structure.append({'id': employee.id, 'name': employee.name, 'manager_id': employee.manager_id})
+    return JsonResponse(structure, safe=False)
