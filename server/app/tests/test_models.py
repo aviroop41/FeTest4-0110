@@ -1,5 +1,5 @@
 from django.test import TestCase
-from .models import Employee, Attendance, LeaveBalance, RecentActivity, LeaveRequest, TeamAttendance, TeamLeaveRequest, OrganizationDirectory, OrganizationStructure, EmployeeProfile
+from .models import Employee, Attendance, LeaveBalance, RecentActivity, LeaveRequest, TeamAttendance, TeamLeaveRequest, OrganizationDirectory, OrganizationStructure, EmployeeProfile, AttendanceReport
 
 class EmployeeModelTest(TestCase):
     def setUp(self):
@@ -131,3 +131,16 @@ class EmployeeProfileModelTest(TestCase):
         self.assertIsNone(profile.phone_number)
         self.assertIsNone(profile.email)
         self.assertIsNone(profile.position)
+
+class AttendanceReportModelTest(TestCase):
+    def setUp(self):
+        self.manager = Employee.objects.create(employee_id='EMP003', name='Alice Brown')
+        self.attendance_report = AttendanceReport.objects.create(manager=self.manager, start_date='2023-01-01', end_date='2023-01-31', report_data={'EMP001': 'Present', 'EMP002': 'Absent'})
+
+    def test_attendance_report_creation(self):
+        self.assertEqual(self.attendance_report.manager.employee_id, 'EMP003')
+        self.assertEqual(self.attendance_report.report_data, {'EMP001': 'Present', 'EMP002': 'Absent'})
+
+    def test_attendance_report_date_range(self):
+        self.assertEqual(self.attendance_report.start_date, '2023-01-01')
+        self.assertEqual(self.attendance_report.end_date, '2023-01-31')

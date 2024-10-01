@@ -4,6 +4,8 @@ from django.shortcuts import render
 
 from django.http import JsonResponse
 from .models import Attendance, LeaveBalance, RecentActivity, LeaveRequest, Employee
+from .services.report_service import ReportService
+from datetime import datetime
 
 
 def get_attendance(request, employee_id):
@@ -84,3 +86,15 @@ def update_employee_profile(request, employee_id):
         except Employee.DoesNotExist:
             return JsonResponse({'error': 'Employee not found'}, status=404)
     return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+
+def generate_attendance_report(request, manager_id):
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+    try:
+        start_date = datetime.strptime(start_date, '%Y-%m-%d')
+        end_date = datetime.strptime(end_date, '%Y-%m-%d')
+        attendance_report = ReportService.get_attendance_report(manager_id, start_date, end_date)
+        return JsonResponse(attendance_report, safe=False)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)

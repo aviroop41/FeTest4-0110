@@ -16,4 +16,5 @@ urlpatterns += [
     path('api/organization/structure', views.get_organization_structure),
     path('api/employee/<int:employee_id>/profile', views.get_employee_profile),
     path('api/employee/<int:employee_id>/profile/update', views.update_employee_profile),
+    path('api/manager/<int:manager_id>/attendance-reports', views.generate_attendance_report),
 ]

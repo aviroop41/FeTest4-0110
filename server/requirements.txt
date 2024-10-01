@@ -15,3 +15,11 @@ Django-REST-Framework
 # Added for employee profile functionalities
 
 django-rest-framework
+
+# Added for attendance report functionality
+
+pandas
+
+# Added for date handling
+
+datetime

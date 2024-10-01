@@ -163,3 +163,23 @@ class UrlsTestCase(TestCase):
         url = reverse('update_employee_profile', args=[9999])
         response = self.client.post(url)
         self.assertEqual(response.status_code, 404)
+
+    def test_get_attendance_details(self):
+        url = reverse('get_attendance', args=[1])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_leave_balance_for_manager(self):
+        url = reverse('get_leave_balance', args=[1])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_employee_profile_invalid_manager(self):
+        url = reverse('get_employee_profile', args=[-1])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 400)
+
+    def test_get_organization_structure_invalid(self):
+        url = reverse('get_organization_structure')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)

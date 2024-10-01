@@ -52,3 +52,9 @@ class EmployeeProfile(models.Model):
     phone_number = models.CharField(max_length=15, null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
     position = models.CharField(max_length=100, null=True, blank=True)
+
+class AttendanceReport(models.Model):
+    manager = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    report_data = models.JSONField()  # Store structured data for attendance

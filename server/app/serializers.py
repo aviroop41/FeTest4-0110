@@ -59,3 +59,8 @@ class EmployeeProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employee
         fields = ['employee_id', 'name']
+
+class AttendanceReportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Attendance
+        fields = ['employee', 'date', 'status']

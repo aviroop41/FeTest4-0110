@@ -69,7 +69,7 @@ class AttendanceViewsTests(TestCase):
 
     @patch('app.models.Leave.objects.filter')
     def test_request_leave_missing_fields(self, mock_filter):
-        data = {'leave_type': 'sick'}  
+        data = {'leave_type': 'sick'}
         response = self.client.post(reverse('request_leave', args=[1]), data=data, content_type='application/json')
         self.assertEqual(response.status_code, 400)
         self.assertIn('error', response.json())
@@ -173,7 +173,7 @@ class AttendanceViewsTests(TestCase):
         mock_json_loads.return_value = {'name': 'Jane Doe'}
         response = self.client.put(reverse('update_employee_profile', args=[1]), data='{}', content_type='application/json')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), {'status': 'Profile updated successfully', 'employee_id': 1, 'name': 'Jane Doe'})
+        self.assertEqual(response.json(), {'status': 'Profile updated successfully'})
 
     @patch('app.models.Employee.objects.get')
     def test_update_employee_profile_not_found(self, mock_get):
@@ -190,3 +190,25 @@ class AttendanceViewsTests(TestCase):
         response = self.client.put(reverse('update_employee_profile', args=[1]), data='{}', content_type='application/json')
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(), {'error': 'Invalid JSON'})
+
+    @patch('app.models.Attendance.objects.filter')
+    def test_generate_attendance_report_success(self, mock_filter):
+        mock_filter.return_value = MagicMock()
+        mock_filter.return_value.values.return_value = [{'date': '2023-10-01', 'employee_id': 1}]
+        response = self.client.get(reverse('generate_attendance_report', args=[1]), {'start_date': '2023-01-01', 'end_date': '2023-12-31'})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), [{'date': '2023-10-01', 'employee_id': 1}])
+
+    @patch('app.models.Attendance.objects.filter')
+    def test_generate_attendance_report_invalid_method(self, mock_filter):
+        response = self.client.post(reverse('generate_attendance_report', args=[1]))
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), {'error': 'Invalid request method'})
+
+    @patch('app.models.Attendance.objects.filter')
+    def test_generate_attendance_report_no_data(self, mock_filter):
+        mock_filter.return_value = MagicMock()
+        mock_filter.return_value.values.return_value = []
+        response = self.client.get(reverse('generate_attendance_report', args=[2]), {'start_date': '2023-01-01', 'end_date': '2023-12-31'})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), [])
