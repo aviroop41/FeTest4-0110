@@ -4,15 +4,15 @@ import { Menu } from '@headlessui/react'; // for dropdown menus
 import { FaUserCircle } from 'react-icons/fa'; // user icon
 
 const Header = () => {
-    const [theme, setTheme] = useState('light'); // managing theme state
+    const [theme, setTheme] = useState('light'); // Set default theme to 'mytheme'
 
     const toggleTheme = () => {
-        setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
-        // Apply theme changes here (e.g., class toggles)
+        setTheme(prev => (prev === 'light' ? 'dark' : 'dark')); // Toggle between themes
+        document.documentElement.setAttribute('data-theme', theme === 'dark' ? 'dark' : 'dark'); // Apply theme
     };
 
     return (
-        <header className={`bg-white shadow-md p-4 flex justify-between items-center ${theme === 'dark' ? 'dark:bg-gray-800' : ''}`}>
+        <header className={`bg-base-100 shadow-md p-4 flex justify-between items-center`}>
             <div className="text-xl font-bold">Company Logo</div>
             <input type="text" placeholder="Search..." className="border rounded p-2 shadow" />
             <div className="flex items-center">
