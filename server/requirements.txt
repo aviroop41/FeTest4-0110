@@ -1,0 +1,32 @@
+django
+
+# Add any additional packages below
+
+rest-framework
+
+# Added for new functionalities
+django-rest-framework
+
+# Added for organization structure functionalities
+Django-REST-Framework
+
+# Added for employee profile functionalities
+django-rest-framework
+
+# Added for attendance report functionality
+pandas
+
+# Added for date handling
+datetime
+
+# Added for notifications functionality
+channels
+
+# Added for role and permission management functionalities
+Django-Guardian
+
+# Added for calendar integration functionality
+requests
+
+# Added for JSON handling
+python-dateutil
