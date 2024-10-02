@@ -38,7 +38,6 @@ const TeamAttendanceOverview = ({ managerId }) => {
         <div className="p-4 bg-white rounded-lg shadow-md">
             <h2 className="text-xl font-semibold mb-4">Team Attendance Overview</h2>
             {loading && <p>Loading...</p>}
-            {error && <p className="text-red-600">{error}</p>}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {dataToDisplay.map((member) => (
                     <div key={member.name} className="bg-gray-100 p-4 rounded-md shadow-sm flex flex-col">

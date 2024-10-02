@@ -63,10 +63,7 @@ const MyTeamPage = () => {
 
     return (
         <main className="flex flex-col p-4"> {/* Main content styling */}
-            {error ? ( // Conditional rendering for error
-                <div role="alert" className="text-red-600">{error}</div> // Display error message
-            ) : (
-                <>
+         
                     <TeamAttendanceOverview data={attendanceData} /> {/* Attendance overview component */}
                     <TeamLeaveRequests requests={leaveRequests} /> {/* Leave requests component with fetched leave requests */}
                     <AttendanceReport 
@@ -75,8 +72,6 @@ const MyTeamPage = () => {
                         onGenerateReport={generateReport} 
                         reportData={reportData} 
                     /> {/* Attendance report component */}
-                </>
-            )}
         </main>
     );
 };

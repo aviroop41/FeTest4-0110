@@ -8,22 +8,21 @@ import MePage from './pages/MePage';
 import MyTeamPage from './pages/MyTeamPage';
 import OrganizationPage from './pages/OrganizationPage';
 import ProfilePage from './pages/ProfilePage';
+import Sidebar from './components/Sidebar';
 
 function App() {
   return (
     <Router>
       <Header />
-      <nav>
-        <Link to="/">Home</Link>
-        <Link to="/app">App</Link>
-        <Link to="/dashboard">Dashboard</Link>
-        <Link to="/me">Me</Link>
-        <Link to="/my-team">My Team</Link>
-        <Link to="/organization">Organization</Link>
-        <Link to="/profile">Profile</Link>
+      {/* <Sidebar /> */}
+      <nav className="flex space-x-4 p-4 bg-gray-100 rounded shadow">
+        <Link to="/dashboard" className="tab">Dashboard</Link>
+        <Link to="/me" className="tab">Me</Link>
+        <Link to="/my-team" className="tab">My Team</Link>
+        <Link to="/organization" className="tab">Organization</Link>
+        <Link to="/profile" className="tab">Profile</Link>
       </nav>
       <Routes>
-        <Route path="/app" element={<AppPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/me" element={<MePage />} />
         <Route path="/my-team" element={<MyTeamPage />} />

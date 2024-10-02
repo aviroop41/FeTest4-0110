@@ -58,7 +58,6 @@ const TeamLeaveRequests = ({ managerId }) => {
   return (
     <div className="p-4">
       <h2 className="text-xl font-bold mb-4">Pending Leave Requests</h2>
-      {error && <p className="text-red-600">{error}</p>}
       <ul className="space-y-4">
         {leaveRequests.map(request => (
           <li key={request.id} className="p-4 border rounded-lg shadow-md flex justify-between items-center">

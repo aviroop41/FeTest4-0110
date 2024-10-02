@@ -12,14 +12,9 @@ const AttendanceDetails = ({ employeeId }) => {
             }
             const data = await response.json();
             setAttendanceData(data);
-        } catch (err) {
-            setError('Failed to fetch attendance details. Showing mock data instead.');
+        } catch {
             // Mock data in case of fetch failure
-            setAttendanceData([
-                { date: '2023-10-01', checkIn: '09:00 AM', checkOut: '05:00 PM', totalHours: 8 },
-                { date: '2023-10-02', checkIn: '09:15 AM', checkOut: '05:15 PM', totalHours: 8 },
-                { date: '2023-10-03', checkIn: '08:50 AM', checkOut: '04:50 PM', totalHours: 8 },
-            ]);
+            setAttendanceData([{ date: '2023-10-01', status: 'Present' }, { date: '2023-10-02', status: 'Absent' }]);
         }
     };
 

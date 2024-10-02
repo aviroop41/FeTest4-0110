@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2'; // Chart.js for visualizations
+import { Chart, registerables } from 'chart.js'; // Import Chart.js
+Chart.register(...registerables); // Register necessary components
 
 const AttendanceReport = ({ managerId }) => {
     const [attendanceData, setAttendanceData] = useState([]);
@@ -43,8 +45,9 @@ const AttendanceReport = ({ managerId }) => {
             {
                 label: 'Attendance',
                 data: attendanceData.map(item => item.attendance),
-                borderColor: 'blue',
+                borderColor: 'rgba(0, 123, 255, 1)', // Ensure color is in rgba format
                 backgroundColor: 'rgba(0, 123, 255, 0.3)',
+                fill: true, // Enable filling under the line
             },
         ],
     };
@@ -52,7 +55,6 @@ const AttendanceReport = ({ managerId }) => {
     return (
         <div className="p-6 bg-white rounded-lg shadow-md">
             <h2 className="text-xl font-semibold mb-4">Attendance Report</h2>
-            {error && <p className="text-red-500">{error}</p>}
             <div className="flex space-x-4 mb-4">
                 <input
                     type="date"

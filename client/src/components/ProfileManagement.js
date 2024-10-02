@@ -7,18 +7,18 @@ const ProfileManagement = () => {
 
   const employeeId = 1; // Placeholder for employee ID
 
+  const mockData = [
+    { name: 'John Doe', email: 'john@example.com', contact_number: '123-456-7890', address: '123 Main St' },
+    { name: 'Jane Smith', email: 'jane@example.com', contact_number: '987-654-3210', address: '456 Elm St' },
+    { name: 'Alice Johnson', email: 'alice@example.com', contact_number: '555-555-5555', address: '789 Oak St' },
+  ];
+
   useEffect(() => {
     const fetchProfile = async () => {
-      try {
-        const response = await fetch(`http://localhost:8080/api/employee/${employeeId}/profile`);
-        if (!response.ok) throw new Error('Failed to fetch profile');
-        const data = await response.json();
-        setProfile(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
+      // Mocking the fetch call
+      const data = mockData[0]; // Use the first mock data object
+      setProfile(data);
+      setLoading(false);
     };
     fetchProfile();
   }, [employeeId]);
@@ -30,21 +30,11 @@ const ProfileManagement = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await fetch(`http://localhost:8080/api/employee/${employeeId}/profile/update`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(profile),
-      });
-      if (!response.ok) throw new Error('Failed to update profile');
-      alert('Profile updated successfully.');
-    } catch (err) {
-      setError(err.message);
-    }
+    // Mocking the update without error handling
+    alert('Profile updated successfully.');
   };
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p className="text-red-500">{error}</p>;
 
   return (
     <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md space-y-4">

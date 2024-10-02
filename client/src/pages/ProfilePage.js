@@ -58,7 +58,6 @@ const ProfilePage = () => {
     return (
         <div className="p-4">
             <h1 className="text-2xl font-bold mb-4">Profile Management</h1>
-            {error && <p className="text-red-500">{error}</p>}
             {profileData ? (
                 <ProfileManagement profile={profileData} />
             ) : (

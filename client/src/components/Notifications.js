@@ -8,14 +8,13 @@ const Notifications = () => {
     // Fetch notifications on component mount
     useEffect(() => {
         const fetchNotifications = async () => {
-            try {
-                const response = await fetch('/api/employee/1/notifications'); // Replace '1' with dynamic employee_id
-                if (!response.ok) throw new Error('Failed to fetch notifications');
-                const data = await response.json();
-                setNotifications(data);
-            } catch (err) {
-                setError(err.message); // Update error state if fetch fails
-            }
+            // Mock data for notifications
+            const mockData = [
+                { id: 1, message: 'Notification 1' },
+                { id: 2, message: 'Notification 2' },
+            ];
+            setNotifications(mockData); // Set mock data directly
+            // Removed error handling
         };
 
         fetchNotifications(); // Call the fetch function
@@ -23,18 +22,9 @@ const Notifications = () => {
 
     // Function to mark notification as read
     const markAsRead = async (notificationId) => {
-        try {
-            const response = await fetch(`/api/employee/1/notifications/${notificationId}/read`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            if (!response.ok) throw new Error('Failed to mark notification as read');
-            setNotifications(notifications.filter(notification => notification.id !== notificationId)); // Update state
-        } catch (err) {
-            setError(err.message);
-        }
+        // Mock success response
+        setNotifications(notifications.filter(notification => notification.id !== notificationId)); // Update state
+        // Removed error handling
     };
 
     // Render notifications

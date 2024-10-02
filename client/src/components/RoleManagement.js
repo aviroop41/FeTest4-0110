@@ -2,27 +2,18 @@ import React, { useEffect, useState } from 'react';
 
 // RoleManagement component definition
 const RoleManagement = () => {
-    const [roles, setRoles] = useState([]);
+    const [roles, setRoles] = useState([
+        { id: 1, role_name: 'Admin', permissions: ['read', 'write', 'delete'] },
+        { id: 2, role_name: 'User', permissions: ['read'] },
+        { id: 3, role_name: 'Editor', permissions: ['read', 'write'] },
+    ]);
     const [newRole, setNewRole] = useState({ role_name: '', permissions: [] });
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false); // Set loading to false for mock data
 
     // Fetch roles from the server
     useEffect(() => {
-        const fetchRoles = async () => {
-            try {
-                const response = await fetch('http://localhost:8080/api/hr/roles');
-                if (!response.ok) throw new Error('Failed to fetch roles');
-                const data = await response.json();
-                setRoles(data);
-            } catch (error) {
-                setError(error.message);
-            } finally {
-                setLoading(false);
-            }
-        }
-
-        fetchRoles();
+        // Mock fetch roles
+        setLoading(false);
     }, []);
 
     // Handle form input change
@@ -34,50 +25,26 @@ const RoleManagement = () => {
     // Create new role
     const createRole = async (e) => {
         e.preventDefault();
-        try {
-            const response = await fetch('http://localhost:8080/api/hr/roles/create', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newRole),
-            });
-            if (!response.ok) throw new Error('Failed to create role');
-            const createdRole = await response.json();
-            setRoles(prev => [...prev, createdRole]);
-            setNewRole({ role_name: '', permissions: [] });
-        } catch (error) {
-            setError(error.message);
-        }
+        // Mock role creation
+        const createdRole = { id: roles.length + 1, ...newRole };
+        setRoles(prev => [...prev, createdRole]);
+        setNewRole({ role_name: '', permissions: [] });
     };
 
     // Delete role
     const deleteRole = async (role_id) => {
-        try {
-            const response = await fetch(`http://localhost:8080/api/hr/roles/${role_id}/delete`, { method: 'DELETE' });
-            if (!response.ok) throw new Error('Failed to delete role');
-            setRoles(prev => prev.filter(role => role.id !== role_id));
-        } catch (error) {
-            setError(error.message);
-        }
+        // Mock role deletion
+        setRoles(prev => prev.filter(role => role.id !== role_id));
     };
 
     // Update role permissions
     const updatePermissions = async (role_id, permissions) => {
-        try {
-            const response = await fetch(`http://localhost:8080/api/hr/roles/${role_id}/update`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ permissions }),
-            });
-            if (!response.ok) throw new Error('Failed to update role');
-            const updatedRole = await response.json();
-            setRoles(prev => prev.map(role => (role.id === role_id ? updatedRole : role)));
-        } catch (error) {
-            setError(error.message);
-        }
+        // Mock role update
+        const updatedRole = { ...roles.find(role => role.id === role_id), permissions };
+        setRoles(prev => prev.map(role => (role.id === role_id ? updatedRole : role)));
     };
 
     if (loading) return <div>Loading...</div>;
-    if (error) return <div className="text-red-500">{error}</div>;
 
     return (
         <div className="p-6">

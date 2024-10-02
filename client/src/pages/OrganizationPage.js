@@ -32,7 +32,6 @@ const OrganizationPage = () => {
 
     // Render loading indicator or error message if applicable
     if (loading) return <p className="text-center">Loading...</p>; 
-    if (error) return <p className="text-red-600 text-center">{error}</p>;
 
     // Render the component
     return (

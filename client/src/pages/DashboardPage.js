@@ -36,8 +36,18 @@ const DashboardPage = () => {
             // Mock data in case of error
             setAttendanceData({ total: 20, present: 18 }); // Example mock data
             setLeaveBalance({ total: 15, used: 5 }); // Example mock data
-            setRecentActivities([{ id: 1, activity: 'Completed project A' }, { id: 2, activity: 'Attended training' }]); // Example mock data
-            setNotifications([{ id: 1, message: 'Leave request approved', status: 'unread' }, { id: 2, message: 'Leave request denied', status: 'unread' }]); // Example mock notifications
+            setRecentActivities([
+                { id: 1, activity: 'Completed project A' },
+                { id: 2, activity: 'Attended training' },
+                { id: 3, activity: 'Participated in team meeting' }, // New mock data
+                { id: 4, activity: 'Submitted performance review' } // New mock data
+            ]); // Example mock data
+            setNotifications([
+                { id: 1, message: 'Leave request approved', status: 'unread' },
+                { id: 2, message: 'Leave request denied', status: 'unread' },
+                { id: 3, message: 'New policy update available', status: 'unread' }, // New mock notification
+                { id: 4, message: 'Meeting scheduled for next week', status: 'unread' } // New mock notification
+            ]); // Example mock notifications
         }
     };
 
@@ -62,7 +72,6 @@ const DashboardPage = () => {
 
     return (
         <div className="p-4 min-h-screen"> {/* Main content area */}
-            {error && <div className="text-red-500">{error}</div>} {/* Display error if any */}
             <h1 className="text-2xl font-semibold mb-4">Dashboard</h1>
             <EmployeeDashboard 
                 attendanceData={attendanceData} 

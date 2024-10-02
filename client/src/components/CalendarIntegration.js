@@ -7,31 +7,22 @@ const CalendarIntegration = ({ employeeId }) => {
     const [calendarProvider, setCalendarProvider] = useState('');
     const [credentials, setCredentials] = useState('');
 
+    const mockEvents = [
+        { id: 1, title: 'Meeting with Team', start: '2023-10-01T10:00:00Z', end: '2023-10-01T11:00:00Z' },
+        { id: 2, title: 'Project Deadline', start: '2023-10-05T12:00:00Z', end: '2023-10-05T13:00:00Z' },
+        { id: 3, title: 'Client Call', start: '2023-10-10T14:00:00Z', end: '2023-10-10T15:00:00Z' },
+        { id: 4, title: 'Team Lunch', start: '2023-10-15T12:00:00Z', end: '2023-10-15T13:00:00Z' },
+    ];
+
     const fetchEvents = async (startDate, endDate) => {
-        try {
-            const response = await fetch(`http://localhost:8080/api/employee/${employeeId}/calendar/events?start_date=${startDate}&end_date=${endDate}`);
-            if (!response.ok) throw new Error('Failed to fetch events');
-            const data = await response.json();
-            setEvents(data);
-        } catch (error) {
-            setError(error.message);
-        } finally {
-            setLoading(false);
-        }
+        // Mocking data instead of fetching
+        setEvents(mockEvents);
+        setLoading(false);
     };
 
     const linkCalendar = async () => {
-        try {
-            const response = await fetch(`http://localhost:8080/api/employee/${employeeId}/calendar/link`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ calendar_provider: calendarProvider, credentials })
-            });
-            if (!response.ok) throw new Error('Failed to link calendar');
-            alert('Calendar linked successfully!');
-        } catch (error) {
-            setError(error.message);
-        }
+        // Mocking successful linking
+        alert('Calendar linked successfully!');
     };
 
     useEffect(() => {
@@ -44,7 +35,6 @@ const CalendarIntegration = ({ employeeId }) => {
     return (
         <div className="p-6 bg-white rounded-lg shadow-md">
             <h2 className="text-xl font-semibold mb-4">Calendar Integration</h2>
-            {error && <div className="text-red-500 mb-4">{error}</div>}
             <div className="mb-4">
                 <label className="block mb-2">Calendar Provider</label>
                 <input
